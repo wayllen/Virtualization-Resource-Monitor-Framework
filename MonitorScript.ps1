@@ -1,4 +1,3 @@
-
 # Use the following area to define the colours of the report
 $Colour1 = "CC0000" # Main Title - currently red
 $Colour2 = "7BA7C7" # Secondary Title - currently blue
@@ -262,21 +261,21 @@ Add-PSSnapin "Vmware.VimAutomation.Core" -ErrorAction SilentlyContinue
 
 
 #vm vsphere server
-$vsphereServer = "10.175.2.24"
+$vsphereServer = "your vsphere server ip"
 $vsphereUser = "administrator"
-$vspherePass = 'P@swrd1'
-$Hostlist = get-content C:\Wayllen\Build-BVT\Utility-Scripts\vmHostName.txt
-$AdvDSvCenter= Get-Content C:\Wayllen\Build-BVT\Utility-Scripts\ADV-DS-vCenter.txt
-$AdvDSLM =  Get-Content C:\Wayllen\Build-BVT\Utility-Scripts\ADV-DS-LM.txt
+$vspherePass = 'Password'
+$Hostlist = get-content .\vmHostName.txt
+$AdvDSvCenter= Get-Content .\ADV-DS-vCenter.txt
+$AdvDSLM =  Get-Content .\ADV-DS-LM.txt
 $Date = get-date 
 $dateFormat = ( get-date ).ToString(‘yyyy-MM-dd’) 
-$FileCSV = "C:\Wayllen\Build-BVT\Utility-Scripts\PMS data folder\AllVMInfo.csv"
+$FileCSV = ".\AllVMInfo.csv"
 
 #connect to the virtual server the VM's are on
 $VIServer = Connect-VIServer -Server $vsphereServer -Protocol https -User $vsphereUser -Password $vspherePass
 
 #Delte the old date before collecting the new data.
-Get-ChildItem -Path "C:\Wayllen\Build-BVT\Utility-Scripts\PMS data folder\" | Remove-Item -Force
+Get-ChildItem -Path ".\PMS data folder\" | Remove-Item -Force
 
 
 # Collect all vm OS info.
@@ -566,9 +565,9 @@ $MyReport += Get-CustomHTMLClose
 #$MyReport | Out-File "C:\Wayllen\Build-BVT\Utility-Scripts\PMS data folder\AdvCheck.html" 
 
 
-$EmailTo = "wei.zhang@igt.com"
-$EmailFrom = "ADV-vCheck@igt.com"
-$SMTPSRV = "10.175.8.116"
+$EmailTo = "your email address"
+$EmailFrom = "sample@love.com"
+$SMTPSRV = "SMTP server ip"
 
 send-SMTPmail $EmailTo $EmailFrom "Advantage Team vCheck Report-$(get-date -f G)" $SMTPSRV $MyReport
 
@@ -576,11 +575,11 @@ $VIServer | Disconnect-VIServer -Confirm:$false
 
 
 #Put the CSV files to remote Linux FTF server
-ftp -v -d -s:C:\Wayllen\Build-BVT\Utility-Scripts\FTPCommands.ftp
+ftp -v -d -s: .\FTPCommands.ftp
 
 
 #Invoke the PMS web service POST method to get all resource date updated.
-$request = [System.Net.WebRequest]::Create("http://10.175.29.70:3000/admin/resources/vms/update")
+$request = [System.Net.WebRequest]::Create("http://IP:port/admin/resources/vms/update")
 $request.Method = "POST"
 $request.ContentType = "application/x-www-form-urlencoded"
 $request.Timeout = 8000
