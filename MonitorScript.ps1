@@ -1,3 +1,4 @@
+# Add one line comments for github test purpose!
 # Use the following area to define the colours of the report
 $Colour1 = "CC0000" # Main Title - currently red
 $Colour2 = "7BA7C7" # Secondary Title - currently blue
